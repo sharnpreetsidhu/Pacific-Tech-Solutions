@@ -1655,68 +1655,78 @@ select {
   }
 }
 
+
+/* FINAL MOBILE FIXES */
 html,
-body {
+body,
+#root {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
 }
 
-* {
-  box-sizing: border-box;
+img,
+video {
+  max-width: 100%;
+  height: auto;
 }
 
-@media (max-width: 768px) {
-  section,
-  .section,
-  .hero,
-  .container,
-  .packages,
-  .package-grid,
-  .features-grid,
-  .impact-card,
-  .machine-card,
-  .process-grid,
-  .contact-card,
-  .footer {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .package-grid,
-  .features-grid,
-  .process-grid {
+@media (max-width: 720px) {
+  .packages-grid {
     display: grid;
     grid-template-columns: 1fr;
-  }
-
-  .packages,
-  .package-grid {
+    gap: 16px;
+    width: 100%;
     overflow: visible;
   }
 
   .package-card {
     width: 100%;
+    max-width: 100%;
     min-width: 0;
   }
 
-  .machine-card,
-  .impact-card {
+  .featured {
+    width: calc(100% - 24px);
+    max-width: calc(100% - 24px);
     overflow: hidden;
   }
 
-  .tag-row,
-  .pill-row,
-  .tabs,
-  .chips {
-    display: flex;
-    overflow-x: auto;
+  .featured > div,
+  .stack-card {
+    min-width: 0;
     max-width: 100%;
   }
 
-  img,
-  video {
+  .featured h2,
+  .section-heading h2,
+  .hero h1,
+  .proof h2,
+  .cta h2 {
+    overflow-wrap: break-word;
+    word-break: normal;
     max-width: 100%;
-    height: auto;
+  }
+
+  .project-list {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .project-list span {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .stack-item {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .footer {
+    max-width: calc(100% - 24px);
   }
 }
