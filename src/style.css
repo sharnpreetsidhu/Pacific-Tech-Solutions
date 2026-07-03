@@ -1654,3 +1654,69 @@ select {
     word-break: break-word;
   }
 }
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  section,
+  .section,
+  .hero,
+  .container,
+  .packages,
+  .package-grid,
+  .features-grid,
+  .impact-card,
+  .machine-card,
+  .process-grid,
+  .contact-card,
+  .footer {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .package-grid,
+  .features-grid,
+  .process-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .packages,
+  .package-grid {
+    overflow: visible;
+  }
+
+  .package-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .machine-card,
+  .impact-card {
+    overflow: hidden;
+  }
+
+  .tag-row,
+  .pill-row,
+  .tabs,
+  .chips {
+    display: flex;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+}
