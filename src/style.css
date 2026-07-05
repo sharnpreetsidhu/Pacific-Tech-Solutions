@@ -1871,3 +1871,89 @@ svg {
 .footer-brand {
   font-weight: 750 !important;
 }
+
+/* FIX FEATURED SECTION CUTTING OFF ON MOBILE */
+@media (max-width: 720px) {
+  .featured {
+    width: calc(100% - 22px) !important;
+    max-width: calc(100% - 22px) !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+    padding: 24px !important;
+    overflow: visible !important;
+    border-radius: 30px !important;
+  }
+
+  .featured-copy,
+  .featured > div,
+  .stack-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .featured h2 {
+    font-size: clamp(2rem, 10vw, 3rem) !important;
+    line-height: 1 !important;
+    letter-spacing: -0.055em !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+  }
+
+  .featured p {
+    font-size: 0.98rem !important;
+    line-height: 1.65 !important;
+    max-width: 100% !important;
+  }
+
+  .project-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    overflow: visible !important;
+    max-width: 100% !important;
+    padding-bottom: 0 !important;
+  }
+
+  .project-list span {
+    flex: 1 1 auto !important;
+    min-width: fit-content !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    text-align: center !important;
+    font-size: 0.86rem !important;
+    line-height: 1.2 !important;
+    padding: 10px 12px !important;
+  }
+
+  .stack-card {
+    display: grid !important;
+    gap: 12px !important;
+    padding: 16px !important;
+    overflow: visible !important;
+  }
+
+  .stack-item {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 15px !important;
+    font-size: 0.92rem !important;
+    line-height: 1.25 !important;
+    overflow-wrap: break-word !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .featured {
+    padding: 20px !important;
+  }
+
+  .featured h2 {
+    font-size: clamp(1.85rem, 10vw, 2.55rem) !important;
+  }
+
+  .project-list span {
+    flex: 1 1 100% !important;
+  }
+}
