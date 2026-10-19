@@ -4970,7 +4970,7 @@ body {
 @media(max-width:600px){.workflow-scene .receptionist-panel{padding:16px}.workflow-scene .agent-identity h2{font-size:17px}.workflow-scene .agent-identity{margin:20px 0}.conversation-thread{height:230px;padding:12px}.automation-event{min-height:155px}.receptionist-top{flex-wrap:wrap}.demo-controls{gap:6px}.demo-next{font-size:11px;padding:8px}.demo-controls .button{font-size:11px}.process-story{grid-template-columns:1fr;gap:26px}.process-display{top:80px;z-index:2;padding:16px;display:grid;grid-template-columns:76px 1fr;gap:10px 14px;background:#eaf0fb;box-shadow:0 12px 30px #18345720}.process-display-top{grid-column:1/-1}.process-orbit{height:105px}.orbit-ring{width:70px;height:70px;box-shadow:none}.process-orbit>span{width:54px;height:54px;border-radius:15px}.process-orbit svg{width:27px}.process-display-copy h3{font-size:20px;min-height:0;margin:8px 0 12px}.process-checks{gap:5px}.process-checks>span{font-size:10px}.process-checks svg{width:11px;height:11px}.process-selector{grid-column:1/-1;margin-top:0}.process-selector button{padding:8px}.story-step{min-height:270px;padding:25px 0 35px 24px;scroll-margin-top:320px}.story-step h3{font-size:23px}.footer-main{display:flex;justify-content:space-between;align-items:center;padding-bottom:20px}.footer .brand>span{font-size:22px}.footer .original-logo{width:42px;height:42px}.footer-services{display:grid;grid-template-columns:1fr 1fr;gap:13px 16px}.footer-services a{font-size:12px}.footer-bottom{display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:17px 0 22px}.footer-bottom>a{order:0}.footer-bottom>span:last-child{display:none}.contact-section{padding:55px 0 45px}}
 @media(prefers-reduced-motion:reduce){.chat-message,.process-display-copy,.process-checks>span,.process-orbit>span{animation:none}.workflow-progress span,.story-step,.story-question,.process-selector button{transition:none}}
 
-<<<<<<< HEAD
+
 /* Make card titles less chunky */
 .flip-card h3,
 .process-card h3,
@@ -5069,7 +5069,7 @@ body {
     flex: 1 1 100% !important;
   }
 }
-=======
+
 /* Final navigation polish: one clean floating surface. */
 .site-header{position:absolute;top:18px;left:0;width:100%;border:0;padding:0 24px}
 .site-header .nav-row{width:100%;max-width:1240px;min-height:76px;padding:12px 18px;margin:0 auto;border:1px solid #d0e1ff1c;border-radius:18px;background:linear-gradient(120deg,#1c2934ed,#131e28ed);box-shadow:0 12px 35px #0002,inset 0 1px 0 #ffffff08;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
@@ -5080,4 +5080,4 @@ body {
 .workflow-scene .scene-grid{opacity:.3}.demo-next:not(:disabled):hover,.demo-reset:hover{background:#a2beff12;border-color:#91a9cc70}.demo-controls button:focus-visible,.process-selector button:focus-visible{outline:2px solid #a5bcff;outline-offset:4px}.project-card{transition:box-shadow .25s,border-color .25s}.project-card:hover{box-shadow:0 15px 40px #1d385610;border-color:#a6bbdd}
 @media(max-width:800px){.site-header{top:12px;padding:0 14px}.site-header .nav-row{min-height:68px;padding:9px 12px;border-radius:15px;position:relative}.site-header .original-logo{width:43px;height:43px}.site-header .brand>span:not(.original-logo){font-size:23px}.site-header .menu-toggle{border-color:#ccdfff26;border-radius:10px;width:44px;height:44px;background:#c6dbff08}.site-header .nav-links.is-open{top:calc(100% + 10px);left:0;right:0;background:#162330;border:1px solid #c1d6f52b;border-radius:15px;padding:10px;box-shadow:0 24px 50px #0006;gap:3px}.site-header .nav-links a{min-height:51px;padding:12px 15px;font-size:15px;border-bottom:0}.site-header .nav-links .nav-contact{margin:7px 0 0;justify-content:space-between}.site-header .nav-links a[aria-current=page]:after{left:auto;right:42px;bottom:24px}.business-hero .hero-layout{padding-top:132px}}
 @media(prefers-reduced-motion:reduce){.site-header .nav-links a,.nav-contact svg,.project-card{transition:none}}
->>>>>>> bc5cfa9 (Update Pacific Tech Website)
+
