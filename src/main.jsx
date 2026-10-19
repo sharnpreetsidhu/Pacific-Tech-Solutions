@@ -1,645 +1,807 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { useForm, ValidationError } from '@formspree/react';
+import React, { useEffect, useRef, useState } from "react";
+import { createRoot } from "react-dom/client";
+import { useForm, ValidationError } from "@formspree/react";
 import {
+  ArrowDown,
   ArrowRight,
-  Bot,
-  BrainCircuit,
+  ArrowUpRight,
   Check,
+  CheckCheck,
+  ChevronDown,
   Code2,
+  Command,
+  FileText,
+  GitBranch,
   Globe2,
   Layers3,
+  Mail,
   Menu,
-  MousePointerClick,
-  PhoneCall,
+  MousePointer2,
+  Play,
+  Plus,
+  RotateCcw,
   ShieldCheck,
   Sparkles,
+  Workflow,
   X,
-  Zap,
-} from 'lucide-react';
-import './style.css';
+} from "lucide-react";
+import "./style.css";
+import {
+  SERVICES,
+  HomeHero,
+  ServiceCards,
+  TimeCalculator,
+  WorkTeaser,
+  BusinessApproach,
+  BusinessFAQ,
+  WorkPage,
+  ServicePage,
+} from "./pages.jsx";
 
-const services = [
-  {
-    icon: <Bot />,
-    title: 'AI Integration',
-    short: 'Smart tools that answer, qualify, quote, and organize leads automatically.',
-    text: 'AI quote tools, chat assistants, lead filters, and simple automations built around how your business actually works.',
-    back: ['AI assistants', 'Quote workflows', 'Lead filtering', 'Owner approval'],
-  },
-  {
-    icon: <Globe2 />,
-    title: 'Website Development',
-    short: 'Premium business websites that look trustworthy on every screen size.',
-    text: 'High-converting websites for trades, real estate, local services, clinics, consultants, and growing brands.',
-    back: ['Landing pages', 'Service pages', 'Mobile-first sections', 'Contact forms'],
-  },
-  {
-    icon: <Code2 />,
-    title: 'Custom Software',
-    short: 'Dashboards, portals, booking systems, and admin panels built from scratch.',
-    text: 'Custom web apps that turn messy operations into clean systems your team can actually use.',
-    back: ['Dashboards', 'Client portals', 'Admin panels', 'Booking tools'],
-  },
-  {
-    icon: <Zap />,
-    title: 'Automation Systems',
-    short: 'Connect your forms, emails, sheets, calendars, and notifications together.',
-    text: 'Automations that reduce repeat work and keep leads moving without the owner chasing everything manually.',
-    back: ['Email flows', 'CRM routing', 'Sheet syncing', 'Team alerts'],
-  },
-];
-
-const projects = [
-  'AI quote generators',
-  'Booking systems',
-  'Smart intake forms',
-  'Business dashboards',
-  'Premium websites',
-  'Lead follow-up flows',
-  'Admin panels',
-  'Client portals',
-  'CRM automations',
-  'AI chat assistants',
-];
-
-const processSteps = [
-  ['01', 'Map', 'We turn your business problem into a clear system plan, pages, forms, workflows, and automations.'],
-  ['02', 'Design', 'We create a premium interface that feels clean, modern, trustworthy, and easy to use on mobile.'],
-  ['03', 'Build', 'We code the website, backend, forms, AI flow, dashboards, or automations your business needs.'],
-  ['04', 'Launch', 'We deploy, test, optimize, and make sure the experience feels smooth on phones, tablets, and desktop.'],
-];
-
-const industries = [
-  'Trades & contractors',
-  'Real estate professionals',
-  'Clinics & wellness businesses',
-  'Restaurants & food services',
-  'Consultants & local service brands',
-  'Growing teams with messy workflows',
-];
-
-const packages = [
-  {
-    title: 'Website Systems',
-    text: 'A premium online presence built to make your business look established, trustworthy, and easy to contact.',
-    features: ['Mobile-first design', 'Lead capture forms', 'Service sections', 'Launch-ready setup'],
-  },
-  {
-    title: 'AI Business Tools',
-    text: 'Smart tools that help answer questions, collect project details, organize leads, and speed up quoting.',
-    features: ['AI assistants', 'Quote flows', 'Customer intake', 'Auto responses'],
-  },
-  {
-    title: 'Custom Software',
-    text: 'Internal systems built around how your business actually works instead of forcing you into generic software.',
-    features: ['Dashboards', 'Admin portals', 'Booking systems', 'Custom web apps'],
-  },
-  {
-    title: 'Automation Setup',
-    text: 'Connect your website, inbox, forms, spreadsheets, calendar, and alerts so the business runs smoother.',
-    features: ['Lead routing', 'Email workflows', 'Sheet syncing', 'Team notifications'],
-  },
-];
-
-const faqs = [
-  {
-    question: 'How long does a website take?',
-    answer: 'A clean business website can usually be built within a few business days once the content, logo, and direction are ready. More advanced systems depend on the features needed.',
-  },
-  {
-    question: 'Can you build AI tools for my business?',
-    answer: 'Yes. Pacific Tech Solutions can build AI quote tools, customer intake systems, internal assistants, lead workflows, and automation systems around your business process.',
-  },
-  {
-    question: 'Do I need to know exactly what I want?',
-    answer: 'No. You can explain your business and what feels slow, messy, or outdated. Then we can map the best website, software, AI tool, or automation system.',
-  },
-  {
-    question: 'Can you update an existing website?',
-    answer: 'Yes. Existing websites can be redesigned, improved for mobile, connected to better forms, upgraded with new sections, or expanded with automation and AI features.',
-  },
-];
-
-function Reveal({ children, className = '', delay = 0 }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const elementRef = useRef(null);
-
+const PROFILE = { email: "admin@pacifictechsolutions.ca" };
+const FORM_ID = "mnjkldgl";
+const INTRO_KEY = "pts-business-intro-v3";
+const routePath =
+  window.location.pathname.replace(/\/index\.html$/, "/").replace(/\/$/, "") ||
+  "/";
+const currentService = SERVICES.find(
+  (service) => routePath === `/services/${service.slug}`,
+);
+const isHome = routePath === "/";
+function BrandMark({ className = "" }) {
+  return (
+    <span className={`original-logo ${className}`}>
+      <img
+        src="/PTS.png"
+        width="1254"
+        height="1254"
+        alt="Pacific Tech Solutions"
+      />
+    </span>
+  );
+}
+function useReducedMotion() {
+  const [reduced, setReduced] = useState(
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.16 }
-    );
-
-    if (elementRef.current) observer.observe(elementRef.current);
-    return () => observer.disconnect();
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(query.matches);
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
   }, []);
+  return reduced;
+}
 
+function initialIntro() {
+  if (!isHome) return false;
+  if (
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+    window.location.hash
+  )
+    return false;
+  try {
+    return sessionStorage.getItem(INTRO_KEY) !== "seen";
+  } catch {
+    return false;
+  }
+}
+
+function Opening({ onFinish }) {
+  const skip = useRef(null);
+  useEffect(() => {
+    skip.current?.focus({ preventScroll: true });
+    const timer = window.setTimeout(onFinish, 2050);
+    return () => window.clearTimeout(timer);
+  }, [onFinish]);
   return (
     <div
-      ref={elementRef}
-      className={`scroll-reveal ${isVisible ? 'show' : ''} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
+      className="opening"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Pacific Tech Solutions introduction"
+      onKeyDown={(event) => {
+        if (event.key === "Escape") onFinish();
+      }}
     >
+      <div className="opening-coordinates" aria-hidden="true">
+        <span>PACIFIC TECH SOLUTIONS</span>
+        <span>IDEA → INTERFACE</span>
+      </div>
+      <div className="opening-grid" aria-hidden="true" />
+      <div className="opening-frame frame-a" aria-hidden="true" />
+      <div className="opening-frame frame-b" aria-hidden="true" />
+      <div className="opening-symbol" aria-hidden="true">
+        <BrandMark />
+        <span>MORE TIME FOR WHAT MATTERS.</span>
+      </div>
+      <button className="intro-skip" ref={skip} onClick={onFinish}>
+        Skip intro <ArrowRight size={15} />
+      </button>
+    </div>
+  );
+}
+
+function Reveal({ children, className = "" }) {
+  const element = useRef(null);
+  useEffect(() => {
+    const node = element.current;
+    if (
+      !node ||
+      !("IntersectionObserver" in window) ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
+    // Only animate content below the fold. Content is visible if JS/API support fails.
+    if (node.getBoundingClientRect().top < window.innerHeight) return;
+    node.classList.add("reveal-pending");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          node.classList.remove("reveal-pending");
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.08 },
+    );
+    observer.observe(node);
+    return () => {
+      observer.disconnect();
+      node.classList.remove("reveal-pending");
+    };
+  }, []);
+  return (
+    <div ref={element} className={`reveal ${className}`}>
       {children}
     </div>
   );
 }
 
-function App() {
-  const [loading, setLoading] = useState(true);
-  const [menuOpen, setMenuOpen] = useState(false);
-
+function Navigation() {
+  const [open, setOpen] = useState(false);
+  const toggle = useRef(null);
+  const header = useRef(null);
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2500);
-    return () => clearTimeout(timer);
-  }, []);
-
+    const onKey = (event) => {
+      if (event.key === "Escape" && open) {
+        setOpen(false);
+        toggle.current?.focus();
+      }
+    };
+    const onOutside = (event) => {
+      if (!header.current?.contains(event.target)) setOpen(false);
+    };
+    const query = window.matchMedia("(min-width: 801px)");
+    const onResize = () => {
+      if (query.matches) setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onOutside);
+    query.addEventListener("change", onResize);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onOutside);
+      query.removeEventListener("change", onResize);
+    };
+  }, [open]);
   return (
-    <>
-      {loading && <WelcomeScreen />}
-
-      <main className={`site-shell ${loading ? 'site-hidden' : 'site-ready'}`}>
-        <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-        <Hero />
-        <LogoStrip />
-        <Services />
-        <ImpactBand />
-        <WhoWeHelp />
-        <Packages />
-        <FeaturedSystem />
-        <Process />
-        <Proof />
-        <FAQ />
-        <CTA />
-        <Footer />
-        <MobileStickyCTA />
-      </main>
-    </>
-  );
-}
-
-function WelcomeScreen() {
-  return (
-    <section className="welcome-screen">
-      <div className="welcome-grid"></div>
-      <div className="welcome-orb orb-one"></div>
-      <div className="welcome-orb orb-two"></div>
-
-      <div className="welcome-card">
-        <img src="/PTS.png" alt="Pacific Tech Solutions logo" className="welcome-logo" />
-        <p className="eyebrow">Pacific Tech Solutions</p>
-        <h1>Building smarter business systems.</h1>
-        <p className="welcome-copy">Websites • AI tools • Software • Automation</p>
-        <div className="loading-bar"><span></span></div>
-        <p className="loading-text">Loading premium experience...</p>
+    <header className="site-header" ref={header}>
+      <div className="container nav-row">
+        <a
+          className="brand"
+          href="/"
+          aria-label="Pacific Tech Solutions home"
+          onClick={() => setOpen(false)}
+        >
+          <BrandMark />
+          <span>
+            Pacific<span className="brand-sub">TECH SOLUTIONS</span>
+          </span>
+        </a>
+        <nav
+          className={`nav-links ${open ? "is-open" : ""}`}
+          id="primary-nav"
+          aria-label="Main navigation"
+        >
+          {[
+            ["/work/", "Our work"],
+            ["/#expertise", "Services"],
+            ["/#approach", "How it works"],
+          ].map(([id, text]) => (
+            <a key={id} href={id} onClick={() => setOpen(false)}>
+              {text}
+              <ArrowUpRight size={16} />
+            </a>
+          ))}
+          <a
+            className="nav-contact"
+            href="#contact"
+            onClick={() => setOpen(false)}
+          >
+            Let’s talk <ArrowUpRight size={16} />
+          </a>
+        </nav>
+        <button
+          className="menu-toggle"
+          ref={toggle}
+          aria-label={open ? "Close navigation" : "Open navigation"}
+          aria-expanded={open}
+          aria-controls="primary-nav"
+          onClick={() => setOpen((value) => !value)}
+        >
+          {open ? <X /> : <Menu />}
+        </button>
       </div>
-    </section>
-  );
-}
-
-function Navbar({ menuOpen, setMenuOpen }) {
-  return (
-    <header className="navbar">
-      <a href="#top" className="brand" onClick={() => setMenuOpen(false)}>
-        <img src="/PTS.png" alt="Pacific Tech Solutions logo" />
-        <span>Pacific Tech Solutions</span>
-      </a>
-
-      <nav className={menuOpen ? 'nav-links open' : 'nav-links'}>
-        <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
-        <a href="#industries" onClick={() => setMenuOpen(false)}>Who We Help</a>
-        <a href="#packages" onClick={() => setMenuOpen(false)}>Solutions</a>
-        <a href="#process" onClick={() => setMenuOpen(false)}>Process</a>
-        <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
-      </nav>
-
-      <a className="nav-cta" href="#contact">Start a Project</a>
-
-      <button className="menu-btn" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
-        {menuOpen ? <X /> : <Menu />}
-      </button>
     </header>
   );
 }
 
-function Hero() {
+const SCENARIOS = {
+  website: {
+    label: "Website inquiry",
+    initials: "AC",
+    name: "Alex Chen",
+    subject: "A better home for my business.",
+    message:
+      "We need a new website for our local business, with services and an easy way to get in touch.",
+    service: "Business website",
+    detail: "Service pages + contact flow",
+    action: "Prepare a discovery call",
+    tag: "Website project",
+  },
+  booking: {
+    label: "Booking request",
+    initials: "JM",
+    name: "Jordan Morgan",
+    subject: "Can we make booking easier?",
+    message:
+      "Our customers book over the phone. We would like them to request an appointment online.",
+    service: "Booking system",
+    detail: "Appointment request workflow",
+    action: "Confirm booking requirements",
+    tag: "Software project",
+  },
+  automation: {
+    label: "Automation inquiry",
+    initials: "SL",
+    name: "Sam Lee",
+    subject: "Less admin. More actual work.",
+    message:
+      "We copy every website inquiry into a spreadsheet and then email the team. Can this be connected?",
+    service: "Lead automation",
+    detail: "Form → spreadsheet → team alert",
+    action: "Map the existing workflow",
+    tag: "Automation project",
+  },
+};
+const STAGES = [
+  { title: "Capture", subtitle: "A new conversation", icon: Mail },
+  { title: "Organize", subtitle: "Useful, structured details", icon: Sparkles },
+  { title: "Review", subtitle: "You stay in control", icon: ShieldCheck },
+];
+
+function SystemDemo() {
+  const [scenario, setScenario] = useState("website");
+  const [stage, setStage] = useState(0);
+  const [running, setRunning] = useState(false);
+  const [complete, setComplete] = useState(false);
+  const timers = useRef([]);
+  const reduced = useReducedMotion();
+  const item = SCENARIOS[scenario];
+  const clearTimers = () => {
+    timers.current.forEach(window.clearTimeout);
+    timers.current = [];
+  };
+  useEffect(() => () => timers.current.forEach(window.clearTimeout), []);
+  useEffect(() => {
+    if (reduced && running) {
+      clearTimers();
+      setStage(2);
+      setRunning(false);
+      setComplete(true);
+    }
+  }, [reduced, running]);
+  function run() {
+    clearTimers();
+    setComplete(false);
+    if (reduced) {
+      setStage(2);
+      setComplete(true);
+      return;
+    }
+    setStage(0);
+    setRunning(true);
+    timers.current = [
+      window.setTimeout(() => setStage(1), 850),
+      window.setTimeout(() => setStage(2), 1750),
+      window.setTimeout(() => {
+        setRunning(false);
+        setComplete(true);
+      }, 2550),
+    ];
+  }
+  function chooseStage(index) {
+    clearTimers();
+    setRunning(false);
+    setComplete(false);
+    setStage(index);
+  }
   return (
-    <section className="hero" id="top">
-      <div className="hero-bg"></div>
-
-      <div className="hero-content reveal-up">
-        <div className="pill">
-          <Sparkles size={16} /> AI • Websites • Software • Automation
-        </div>
-
-        <h1>
-          Websites, AI tools, and software built to help businesses grow
-        </h1>
-
-        <p>
-          Pacific Tech Solutions builds premium websites, AI integrations, booking systems, quote tools, dashboards, and custom software for small to medium businesses ready to level up.
-        </p>
-
-        <div className="hero-actions">
-          <a href="#contact" className="btn primary">Build My System <ArrowRight size={18} /></a>
-          <a href="#services" className="btn secondary">See What We Build</a>
-        </div>
-
-        <div className="hero-stats">
-          <div><strong>AI</strong><span>Powered Business tools</span></div>
-          <div><strong>24/7</strong><span>Digital presence</span></div>
-          <div><strong>100%</strong><span>Custom-built approach</span></div>
-        </div>
-      </div>
-
-      <div className="hero-visual reveal-up delay-one">
-        <div className="orbital-stage" aria-hidden="true">
-          <div className="orbit-ring ring-one"></div>
-          <div className="orbit-ring ring-two"></div>
-          <div className="floating-cube cube-one"><Bot size={28} /></div>
-          <div className="floating-cube cube-two"><Code2 size={28} /></div>
-          <div className="floating-cube cube-three"><Zap size={28} /></div>
-        </div>
-
-        <div className="glass-panel dashboard-card">
-          <div className="panel-top"><span></span><span></span><span></span></div>
-
-          <div className="system-status">
-            <div>
-              <p>Live Business System</p>
-              <h3>AI Quote & Lead Engine</h3>
-            </div>
-            <span className="status-dot">Online</span>
-          </div>
-
-          <div className="metric-grid">
-            <div><p>New Leads</p><strong>Auto</strong></div>
-            <div><p>Manual Work</p><strong>-62%</strong></div>
-            <div><p>Response Time</p><strong>Instant</strong></div>
-            <div><p>Requests</p><strong>Sorted</strong></div>
-          </div>
-
-          <div className="ai-flow">
-            <div><MousePointerClick /> Website Form</div>
-            <span></span>
-            <div><BrainCircuit /> AI Assistant</div>
-            <span></span>
-            <div><ShieldCheck /> Owner Approval</div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function LogoStrip() {
-  const strip = [...projects, ...projects];
-  return (
-    <section className="logo-strip" aria-label="What Pacific Tech Solutions builds">
-      <div className="marquee-track">
-        {strip.map((item, index) => <span key={`${item}-${index}`}>{item}</span>)}
-      </div>
-    </section>
-  );
-}
-
-function Services() {
-  return (
-    <section className="section" id="services">
-      <Reveal>
-        <div className="section-heading">
-          <p className="eyebrow">What we build</p>
-          <h2>Everything a modern business needs to operate online and look premium.</h2>
-        </div>
-      </Reveal>
-
-      <div className="services-grid">
-        {services.map((service, index) => (
-          <Reveal key={service.title} delay={index * 110}>
-            <FlipCard item={service} />
-          </Reveal>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function FlipCard({ item }) {
-  const [flipped, setFlipped] = useState(false);
-
-  return (
-    <article
-      className={`flip-card ${flipped ? 'flipped' : ''}`}
-      onClick={() => setFlipped(!flipped)}
-      tabIndex="0"
-      onKeyDown={(event) => {
-        if (event.key === 'Enter' || event.key === ' ') setFlipped(!flipped);
-      }}
+    <div
+      className={`system-demo ${running ? "is-running" : ""}`}
+      id="playground"
     >
-      <div className="flip-inner">
-        <div className="flip-face flip-front">
-          <div className="service-icon">{item.icon}</div>
-          <h3>{item.title}</h3>
-          <p>{item.short}</p>
-          <span className="tap-hint">Tap to flip</span>
-        </div>
-
-        <div className="flip-face flip-back">
-          <h3>{item.title}</h3>
-          <p>{item.text}</p>
-          <div className="mini-list">
-            {item.back.map((feature) => <span key={feature}><Check size={15} /> {feature}</span>)}
-          </div>
-        </div>
+      <div className="demo-chrome">
+        <span className="chrome-dots" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+        </span>
+        <span>Pacific / workflow</span>
+        <span className="demo-label">INTERACTIVE DEMO</span>
       </div>
-    </article>
-  );
-}
-
-function ImpactBand() {
-  return (
-    <Reveal>
-      <section className="impact-band">
-        <div className="impact-copy">
-          <p className="eyebrow">Mobile-first experience</p>
-          <h2>Professional websites and business systems that make your company look credible, modern, and ready for bigger clients.</h2>
-        </div>
-        <div className="phone-stack" aria-hidden="true">
-          <div className="phone-card phone-main">
-            <div className="phone-notch"></div>
-            <div className="phone-screen-line wide"></div>
-            <div className="phone-screen-line"></div>
-            <div className="phone-mini-grid"><span></span><span></span><span></span><span></span></div>
-            <div className="phone-cta"></div>
+      <div className="demo-body">
+        <div className="demo-title">
+          <div>
+            <span className="overline">ONE INQUIRY. A CLEAR NEXT STEP.</span>
+            <h2>Meet your next workflow.</h2>
+          </div>
+          <div className="demo-app-icon">
+            <Workflow size={22} />
           </div>
         </div>
-      </section>
-    </Reveal>
-  );
-}
-
-function FeaturedSystem() {
-  return (
-    <Reveal>
-      <section className="featured" id="systems">
-        <div className="featured-copy">
-          <p className="eyebrow">Built for real businesses</p>
-          <h2>Not just a website. A full digital machine.</h2>
-          <p>
-            Most small businesses lose time answering the same questions, chasing leads, sending manual quotes,
-            and managing messy spreadsheets. We build systems that handle the boring work and make the business feel premium from the first click.
-          </p>
-
-          <div className="project-list">
-            {projects.map((project) => <span key={project}>{project}</span>)}
-          </div>
-        </div>
-
-        <div className="stack-card">
-          <div className="stack-item"><Layers3 /> Website frontend</div>
-          <div className="stack-item"><Bot /> AI workflow</div>
-          <div className="stack-item"><Code2 /> Smart data capture</div>
-          <div className="stack-item"><Zap /> Automated follow-up</div>
-        </div>
-      </section>
-    </Reveal>
-  );
-}
-
-function Process() {
-  return (
-    <section className="section process-section" id="process">
-      <Reveal>
-        <div className="section-heading">
-          <p className="eyebrow">How it works</p>
-          <h2>A clean build process from idea to live system.</h2>
-        </div>
-      </Reveal>
-
-      <div className="process-grid">
-        {processSteps.map(([num, title, text], index) => (
-          <Reveal key={num} delay={index * 110}>
-            <article className="process-card">
-              <strong>{num}</strong>
-              <h3>{title}</h3>
-              <p>{text}</p>
-            </article>
-          </Reveal>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function Proof() {
-  return (
-    <Reveal>
-      <section className="proof">
-        <div>
-          <p className="eyebrow">Built to impress fast</p>
-          <h2>Designed for businesses that need trust, speed, and a sharper online presence.</h2>
-          <p>The goal is simple: make your business easier to find, easier to trust, easier to book, and easier to run.</p>
-        </div>
-
-        <div className="proof-card">
-          <p>Business Impact</p>
-          <h3>Professional systems that make your business feel bigger.</h3>
-          <div className="proof-pills">
-            <span><Zap size={15} /> Faster response</span>
-            <span><Globe2 size={15} /> Better mobile</span>
-            <span><ArrowRight size={15} /> Premium launch</span>
-          </div>
-        </div>
-      </section>
-    </Reveal>
-  );
-}
-
-function CTA() {
-  const [state, handleSubmit] = useForm('mnjkldgl');
-
-  return (
-    <Reveal>
-      <section className="cta" id="contact">
-        <div>
-          <p className="eyebrow">Ready to build?</p>
-          <h2>Tell us what you want built.</h2>
-          <p>Send the details and we’ll help map the best website, AI tool, software, or automation system for your business.</p>
-
-          <div className="contact-details">
-            <p><strong>Email:</strong> <a href="mailto:pacifictechsolutions7@gmail.com">pacifictechsolutions7@gmail.com</a></p>
-            <p><strong>Serving:</strong> Businesses across Canada</p>
-          </div>
-        </div>
-
-        {state.succeeded ? (
-          <div className="success-card">
-            <h3>Request sent.</h3>
-            <p>Thanks for reaching out. Pacific Tech Solutions will get back to you soon.</p>
-            <a className="btn secondary" href="#top">Back to top</a>
-          </div>
-        ) : (
-          <form className="contact-form" onSubmit={handleSubmit}>
-            <input name="name" type="text" placeholder="Your name" required />
-            <ValidationError className="form-error" prefix="Name" field="name" errors={state.errors} />
-
-            <input name="email" type="email" placeholder="Email address" required />
-            <ValidationError className="form-error" prefix="Email" field="email" errors={state.errors} />
-
-            <input name="phone" type="text" placeholder="Phone number optional" />
-            <input name="business" type="text" placeholder="Business name" />
-
-            <select name="service" defaultValue="" required>
-              <option value="" disabled>What do you need?</option>
-              <option>Website development</option>
-              <option>AI integration</option>
-              <option>Custom software</option>
-              <option>Business automation</option>
-              <option>Quote system</option>
-              <option>Booking system</option>
-              <option>Dashboard or admin panel</option>
-              <option>Not sure yet</option>
+        <label className="scenario-picker">
+          <span>Try a scenario</span>
+          <span className="select-wrap">
+            <select
+              value={scenario}
+              onChange={(event) => {
+                clearTimers();
+                setScenario(event.target.value);
+                setStage(0);
+                setRunning(false);
+                setComplete(false);
+              }}
+              aria-label="Demo scenario"
+            >
+              {Object.entries(SCENARIOS).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value.label}
+                </option>
+              ))}
             </select>
-            <ValidationError className="form-error" prefix="Service" field="service" errors={state.errors} />
-
-            <select name="budget" defaultValue="">
-              <option value="" disabled>Estimated budget</option>
-              <option>Under $500</option>
-              <option>$500 - $1,000</option>
-              <option>$1,000 - $2,500</option>
-              <option>$2,500 - $5,000</option>
-              <option>$5,000+</option>
-              <option>Not sure yet</option>
-            </select>
-
-            <select name="timeline" defaultValue="">
-              <option value="" disabled>Timeline</option>
-              <option>ASAP</option>
-              <option>1-2 weeks</option>
-              <option>2-4 weeks</option>
-              <option>1-2 months</option>
-              <option>Just exploring</option>
-            </select>
-
-            <textarea name="message" placeholder="Tell us about the project, business, and what you want the system to do..." required></textarea>
-            <ValidationError className="form-error" prefix="Message" field="message" errors={state.errors} />
-
-            <input type="hidden" name="_subject" value="New quote request from Pacific Tech Solutions website" />
-
-            <button className="btn primary" type="submit" disabled={state.submitting}>
-              {state.submitting ? 'Sending...' : 'Request Quote'}
-              {!state.submitting && <ArrowRight size={18} />}
+            <ChevronDown size={14} />
+          </span>
+        </label>
+        <div
+          className="workflow-steps"
+          role="tablist"
+          aria-label="Workflow stages"
+        >
+          {STAGES.map((step, index) => (
+            <button
+              type="button"
+              key={step.title}
+              id={`stage-tab-${index}`}
+              role="tab"
+              aria-selected={stage === index}
+              aria-controls="stage-panel"
+              tabIndex={stage === index ? 0 : -1}
+              className={`${stage === index ? "active" : ""} ${stage > index ? "done" : ""}`}
+              onClick={() => chooseStage(index)}
+              onKeyDown={(event) => {
+                let next;
+                if (event.key === "ArrowRight") next = (index + 1) % 3;
+                if (event.key === "ArrowLeft") next = (index + 2) % 3;
+                if (event.key === "Home") next = 0;
+                if (event.key === "End") next = 2;
+                if (next !== undefined) {
+                  event.preventDefault();
+                  chooseStage(next);
+                  document.getElementById(`stage-tab-${next}`)?.focus();
+                }
+              }}
+            >
+              <span className="step-icon">
+                {stage > index ? <Check size={17} /> : <step.icon size={17} />}
+              </span>
+              <span>{step.title}</span>
             </button>
-          </form>
-        )}
-      </section>
-    </Reveal>
-  );
-}
-
-function WhoWeHelp() {
-  return (
-    <section className="section who-section" id="industries">
-      <Reveal>
-        <div className="section-heading">
-          <p className="eyebrow">Who we help</p>
-          <h2>Built for local businesses that need better systems.</h2>
+          ))}
         </div>
-      </Reveal>
-
-      <div className="industry-grid">
-        {industries.map((industry, index) => (
-          <Reveal key={industry} delay={index * 85}>
-            <div className="industry-card"><ShieldCheck /><span>{industry}</span></div>
-          </Reveal>
-        ))}
+        <div
+          className="stage-panel"
+          id="stage-panel"
+          role="tabpanel"
+          aria-labelledby={`stage-tab-${stage}`}
+          tabIndex={0}
+        >
+          <div className="stage-content" key={`${scenario}-${stage}`}>
+            {stage === 0 && (
+              <>
+                <div className="message-heading">
+                  <span className="avatar">{item.initials}</span>
+                  <div>
+                    <strong>{item.name}</strong>
+                    <span>Sample customer · Website form</span>
+                  </div>
+                  <span className="tiny-badge">NEW</span>
+                </div>
+                <h3>{item.subject}</h3>
+                <p>{item.message}</p>
+                <div className="message-bottom">
+                  <span>
+                    <span className="small-dot" /> Inquiry received
+                  </span>
+                  <Mail size={15} />
+                </div>
+              </>
+            )}
+            {stage === 1 && (
+              <>
+                <div className="panel-label">
+                  <Sparkles size={16} /> Structured inquiry{" "}
+                  <span className="tiny-badge">ORGANIZED</span>
+                </div>
+                <dl className="structured-data">
+                  <div>
+                    <dt>Service</dt>
+                    <dd>{item.service}</dd>
+                  </div>
+                  <div>
+                    <dt>Scope</dt>
+                    <dd>{item.detail}</dd>
+                  </div>
+                  <div>
+                    <dt>Next step</dt>
+                    <dd>{item.action}</dd>
+                  </div>
+                </dl>
+                <p className="panel-footnote">
+                  The right details, ready for a human decision.
+                </p>
+              </>
+            )}
+            {stage === 2 && (
+              <>
+                <div className="panel-label">
+                  <ShieldCheck size={17} /> Ready for your review{" "}
+                  <span className="review-dot" />
+                </div>
+                <div className="review-card">
+                  <span className="overline">SUGGESTED FOLLOW-UP</span>
+                  <p>
+                    Hi {item.name.split(" ")[0]}, thanks for reaching out. Let’s
+                    talk through your {item.service.toLowerCase()} and map out
+                    the next steps.
+                  </p>
+                </div>
+                <div className="approval-note">
+                  <CheckCheck size={16} />
+                  <span>Draft prepared. Nothing sent automatically.</span>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+        <div className="demo-actions">
+          <span aria-live="polite">
+            {running
+              ? `Step ${stage + 1} of 3 · ${STAGES[stage].title}`
+              : complete
+                ? "Complete. Your turn to explore."
+                : "A small example of what’s possible."}
+          </span>
+          <button className="run-button" onClick={run} disabled={running}>
+            {running ? "Running" : complete ? "Replay" : "Run demo"}
+            {complete ? (
+              <RotateCcw size={14} />
+            ) : (
+              <Play size={14} fill="currentColor" />
+            )}
+          </button>
+        </div>
       </div>
-    </section>
+      <div className="demo-disclaimer">
+        <span className="small-dot" /> Illustrative demo · Sample data · No live
+        AI requests
+      </div>
+    </div>
   );
 }
 
-function Packages() {
+function Contact() {
+  const [state, handleSubmit] = useForm(FORM_ID);
+  const [fields, setFields] = useState({
+    name: "",
+    email: "",
+    service: currentService?.name || "",
+    message: "",
+  });
+  const completed = Object.values(fields).filter((value) =>
+    value.trim(),
+  ).length;
+  function trackForm(event) {
+    const { name, value } = event.target;
+    if (name in fields)
+      setFields((previous) => ({ ...previous, [name]: value }));
+  }
   return (
-    <section className="section packages-section" id="packages">
-      <Reveal>
-        <div className="section-heading">
-          <p className="eyebrow">Solutions</p>
-          <h2>Packages built around what your business actually needs.</h2>
-        </div>
-      </Reveal>
-
-      <div className="packages-grid">
-        {packages.map((item, index) => (
-          <Reveal key={item.title} delay={index * 110}>
-            <article className="package-card">
-              <div className="package-orb"><Layers3 size={21} /></div>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-
-              <div className="package-features">
-                {item.features.map((feature) => <span key={feature}><Sparkles size={15} />{feature}</span>)}
+    <section className="contact-section" id="contact">
+      <div className="container contact-layout">
+        <Reveal>
+          <p className="eyebrow">
+            <span className="accent-dot" /> LET’S TALK ABOUT YOUR BUSINESS.
+          </p>
+          <h2>
+            Let’s get
+            <br />
+            some time
+            <br />
+            <span>back.</span>
+          </h2>
+          <p className="contact-description">
+            Tell us what takes up too much of your day. We’ll help you explore a
+            simpler way to get it done.
+          </p>
+          <a className="email-link" href={`mailto:${PROFILE.email}`}>
+            {PROFILE.email}
+            <ArrowUpRight size={19} />
+          </a>
+          <span className="contact-location">
+            Based in British Columbia · Working with businesses across Canada
+          </span>
+        </Reveal>
+        <Reveal className="contact-form-wrap">
+          {state.succeeded ? (
+            <div className="success-panel" role="status">
+              <span className="success-icon">
+                <Check size={26} />
+              </span>
+              <p className="eyebrow">MESSAGE RECEIVED</p>
+              <h3>A good place to start.</h3>
+              <p>
+                Thanks for reaching out. We’ll review your project and get back
+                to you by email.
+              </p>
+              <a className="button button-blue" href="#top">
+                Back to the top <ArrowUpRight size={17} />
+              </a>
+            </div>
+          ) : (
+            <form
+              className="contact-form"
+              onSubmit={handleSubmit}
+              onChange={trackForm}
+            >
+              <div className="form-heading">
+                <span>START A CONVERSATION</span>
+                <span className="form-completion" aria-live="polite">
+                  {completed} / 4 details
+                </span>
+                <ArrowUpRight size={23} />
               </div>
-
-              <a href="#contact" className="package-link">Request Quote <ArrowRight size={16} /></a>
-            </article>
-          </Reveal>
-        ))}
+              <div className="form-progress" aria-hidden="true">
+                <span style={{ width: `${completed * 25}%` }} />
+              </div>
+              <div className="form-row">
+                <label htmlFor="contact-name">
+                  Your name
+                  <input
+                    id="contact-name"
+                    name="name"
+                    autoComplete="name"
+                    placeholder="Alex Chen"
+                    required
+                  />
+                </label>
+                <label htmlFor="contact-email">
+                  Email address
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="alex@company.com"
+                    required
+                  />
+                </label>
+              </div>
+              <ValidationError
+                prefix="Email"
+                field="email"
+                errors={state.errors}
+                className="form-error"
+              />
+              <label htmlFor="contact-service">
+                What are you thinking?
+                <select
+                  id="contact-service"
+                  name="service"
+                  defaultValue={currentService?.name || ""}
+                  required
+                >
+                  <option value="" disabled>
+                    Select a starting point
+                  </option>
+                  {SERVICES.map((service) => (
+                    <option key={service.slug}>{service.name}</option>
+                  ))}
+                  <option>Something else / not sure yet</option>
+                </select>
+              </label>
+              <label htmlFor="contact-message">
+                A little about your idea
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  rows="4"
+                  placeholder="Which task, question, or workflow would you like to make easier?"
+                  required
+                />
+              </label>
+              <ValidationError
+                prefix="Message"
+                field="message"
+                errors={state.errors}
+                className="form-error"
+              />
+              <details className="optional-details">
+                <summary>
+                  Add budget & timeline <Plus size={15} />
+                </summary>
+                <div className="form-row">
+                  <label htmlFor="budget">
+                    Budget <span>(optional)</span>
+                    <input
+                      id="budget"
+                      name="budget"
+                      placeholder="An estimate is fine"
+                    />
+                  </label>
+                  <label htmlFor="timeline">
+                    Timeline <span>(optional)</span>
+                    <input
+                      id="timeline"
+                      name="timeline"
+                      placeholder="When would you like to launch?"
+                    />
+                  </label>
+                </div>
+              </details>
+              <div className="form-honeypot" aria-hidden="true">
+                <label>
+                  Leave this empty
+                  <input name="_gotcha" tabIndex={-1} autoComplete="off" />
+                </label>
+              </div>
+              <input
+                type="hidden"
+                name="_subject"
+                value="New Pacific Tech Solutions project inquiry"
+              />
+              <ValidationError errors={state.errors} className="form-error" />
+              <button
+                className="button button-blue submit-button"
+                type="submit"
+                disabled={state.submitting}
+              >
+                {state.submitting
+                  ? "Sending your message…"
+                  : "Send project inquiry"}
+                <ArrowUpRight size={18} />
+              </button>
+              <p className="form-note">
+                Your details are used to respond to your inquiry. Prefer email?{" "}
+                <a href={`mailto:${PROFILE.email}`}>Get in touch directly.</a>
+              </p>
+            </form>
+          )}
+        </Reveal>
       </div>
     </section>
   );
-}
-
-function FAQ() {
-  return (
-    <section className="section faq-section" id="faq">
-      <Reveal>
-        <div className="section-heading">
-          <p className="eyebrow">FAQ</p>
-          <h2>Common questions before starting a project.</h2>
-        </div>
-      </Reveal>
-
-      <div className="faq-list">
-        {faqs.map((item, index) => (
-          <Reveal key={item.question} delay={index * 85}>
-            <details className="faq-item">
-              <summary>{item.question}</summary>
-              <p>{item.answer}</p>
-            </details>
-          </Reveal>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function MobileStickyCTA() {
-  return <a href="#contact" className="mobile-sticky-cta"><PhoneCall size={16} /> Request Quote</a>;
 }
 
 function Footer() {
   return (
     <footer className="footer">
-      <div className="footer-left">
-        <div className="footer-brand">
-          <img src="/PTS.png" alt="Pacific Tech Solutions logo" />
-          <span>Pacific Tech Solutions</span>
-        </div>
-        <p>AI Integration • Website Development • Custom Software • Automation</p>
+      <div className="container footer-main">
+        <a href="/" className="brand" aria-label="Pacific Tech Solutions home">
+          <BrandMark />
+          <span>
+            Pacific<span className="brand-sub">TECH SOLUTIONS</span>
+          </span>
+        </a>
+        <span>Websites, software, and AI that save you time.</span>
+        <a href="#top" className="back-top">
+          Back to top <ArrowUpRight size={16} />
+        </a>
       </div>
-
-      <div className="footer-right">
-        <a href="mailto:pacifictechsolutions7@gmail.com">pacifictechsolutions7@gmail.com</a>
-        <span>Serving businesses across Canada</span>
+      <div className="container footer-services">
+        {SERVICES.map((service) => (
+          <a key={service.slug} href={`/services/${service.slug}/`}>
+            {service.name}
+          </a>
+        ))}
+        <a href="/work/">Our work</a>
+      </div>
+      <div className="container footer-bottom">
+        <span>© {new Date().getFullYear()} Pacific Tech Solutions</span>
+        <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
+        <span>Built for your business.</span>
       </div>
     </footer>
   );
 }
-
-createRoot(document.getElementById('root')).render(<App />);
+function App() {
+  const [intro, setIntro] = useState(initialIntro);
+  const reduced = useReducedMotion();
+  const finishIntro = React.useCallback(() => {
+    try {
+      sessionStorage.setItem(INTRO_KEY, "seen");
+    } catch {}
+    setIntro(false);
+    requestAnimationFrame(() =>
+      document.getElementById("hero-title")?.focus({ preventScroll: true }),
+    );
+  }, []);
+  useEffect(() => {
+    if (reduced && intro) finishIntro();
+  }, [reduced, intro, finishIntro]);
+  useEffect(() => {
+    if (!intro) return;
+    const old = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = old;
+    };
+  }, [intro]);
+  return (
+    <>
+      {intro && !reduced && <Opening onFinish={finishIntro} />}
+      <div
+        className={`site ${intro ? "intro-playing" : "site-ready"}`}
+        inert={intro ? true : undefined}
+      >
+        <a className="skip-link" href="#main">
+          Skip to content
+        </a>
+        <Navigation />
+        <main id="main">
+          <div id="top" />
+          {isHome ? (
+            <>
+              <HomeHero />
+              <ServiceCards Reveal={Reveal} />
+              <TimeCalculator />
+              <WorkTeaser Reveal={Reveal} />
+              <BusinessApproach Reveal={Reveal} />
+              <BusinessFAQ />
+            </>
+          ) : routePath === "/work" ? (
+            <WorkPage />
+          ) : currentService ? (
+            <ServicePage service={currentService} SystemDemo={SystemDemo} />
+          ) : (
+            <section className="inner-hero">
+              <div className="container">
+                <h1 id="hero-title">Page not found.</h1>
+                <a className="button button-blue" href="/">
+                  Return home <ArrowRight size={17} />
+                </a>
+              </div>
+            </section>
+          )}
+          <Contact />
+        </main>
+        <Footer />
+      </div>
+    </>
+  );
+}
+createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);
